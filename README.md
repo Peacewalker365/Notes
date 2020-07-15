@@ -1,40 +1,41 @@
 ##**CS Study Plan** {#Peacewalker365}
 
 **1. Fundamentals**
-  - [ ] Computer Architecture and Organization
-  - [ ] Data Structures
-  - [ ] Algorithms
+  - [X] Computer Architecture and Organization
+  - [X] Data Structures
+  - [X] Algorithms
   - [ ] TCP/IP
   - [ ] Designs
   
 **2. Langs(Pick 3)**
-  - [ ] C/C++
-  - [ ] C#/Java
-  - [ ] Python
+  - [X] C/C++
+  - [X] C#/Java
+  - [X] Python
   - [ ] JavaScript
   - [ ] Go
   - [ ] Rust
 
 **3. Shells**
-  - [ ] Zsh
+  - [X] Zsh
   - [ ] Bash
   - [ ] SSH
   
 **4. IDEs/Text Editors**
-  - [ ] IntelliJ IDEA
+  - [X] IntelliJ IDEA
   - [ ] VS
-  - [ ] VSCode
+  - [X] VSCode
   - [ ] Vim
   - [ ] jGRASP
 
 **5. Tools**
   - [ ] Docker
-  - [ ] Git/Github
+  - [X] Git/Github
   
 **6. Projects**
-  - [ ] Simple ATM
-  - [ ] Console 2048 mini-Game
-  - [ ] Mainstream Algo Realization
+  - [X] Simple ATM
+  - [X] Simple ATM Rewrite
+  - [X] Console 2048 mini-Game
+  - [X] Mainstream Algo Realization
   
   
   
@@ -48,8 +49,12 @@
 - ~~C# Basic~~
 - ~~Java Basic~~
 - ~~Python Basic~~
-- Data Structures `On going`
+- ~~Simple ATm~~
+- ~~Console 2048~~
+- Simple ATM Rewrite `ongoing`
+- Data Structures `ongoing`
 - Algorithms `ongoing`
-- Advanced Statistics `On going`
-- Advanced Linear Algebra `On going`
+- Adv Statistics `ongoing`
+- Adv Linear Algebra `ongoing`
+- C# Advanced `ongoing`
 
