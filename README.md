@@ -1,10 +1,3 @@
-
-```json
-#include <stdio.h>
-int main (void)
-{
-```
-
 ##**CS Study Plan** {#Peacewalker365}
 
 **1. Fundamentals**
@@ -47,33 +40,16 @@ int main (void)
   
 ###**Progresses**
 
-~~Statistics~~
+- ~~Statistics~~
+- ~~Discrete Maith~~
+- ~~Linear Algebra~~
+- ~~Computer Architecture and Organization~~
+- ~~C Basic~~
+- ~~C# Basic~~
+- ~~Java Basic~~
+- ~~Python Basic~~
+- Data Structures `On going`
+- Algorithms `ongoing`
+- Advanced Statistics `On going`
+- Advanced Linear Algebra `On going`
 
-~~Discrete Maith~~
-
-~~Linear Algebra~~
-
-~~Computer Architecture and Organization~~
-
-~~C Basic~~
-
-~~C# Basic~~
-
-~~Java Basic~~
-
-~~Python Basic~~
-
-Data Structures `On going`
-Algorithms ``ongoing``
-Advanced Statistics `On going`
-Advanced Linear Algebra `On going`
-
-
-
-
-
-
-```json
-return 0;
-}
-```
