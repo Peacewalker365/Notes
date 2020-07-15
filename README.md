@@ -1,44 +1,71 @@
-<<<<<<< HEAD
-# Notes
-StudyNotes
 
-CS
-=======
-## Welcome to GitHub Pages
-
-You can use the [editor on GitHub](https://github.com/Peacewalker365/Notes/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+```json
+#include <stdio.h>
+int main (void)
+{
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+##**CS Study Plan** {#Peacewalker365}
 
-### Jekyll Themes
+**1. Fundamentals**
+  - [ ] Computer Architecture and Organization
+  - [ ] Data Structures
+  - [ ] Algorithms
+  - [ ] TCP/IP
+  - [ ] Designs
+  
+**2. Langs(Pick 3)**
+  - [ ] C/C++
+  - [ ] C#/Java
+  - [ ] Python
+  - [ ] JavaScript
+  - [ ] Go
+  - [ ] Rust
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Peacewalker365/Notes/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+**3. Shells**
+  - [ ] Zsh
+  - [ ] Bash
+  - [ ] SSH
+  
+**4. IDEs/Text Editors**
+  - [ ] IntelliJ IDEA
+  - [ ] VS
+  - [ ] VSCode
+  - [ ] Vim
+  - [ ] jGRASP
 
-### Support or Contact
+**5. Tools**
+  - [ ] Docker
+  - [ ] Git/Github
+  
+**6. Projects**
+  - [ ] Simple ATM
+  - [ ] Console 2048 mini-Game
+  - [ ] Mainstream Algo Realization
+  
+  
+  
+###**Progresses**
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
->>>>>>> 443eaee0809ffefefb6693fb10b3f1b5f97bb0da
+~~Statistics~~
+~~Discrete Maith~~
+~~Linear Algebra~~
+~~Computer Architecture and Organization~~
+~~C Basic~~
+~~C# Basic~~
+~~Java Basic~~
+~~Python Basic~~
+Data Structures `On going`
+Algorithms ``status = ongoing``
+Advanced Statistics `On going`
+Advanced Linear Algebra `On going`
+
+
+
+
+
+
+```json
+return 0;
+}
+```
