@@ -48,15 +48,23 @@ int main (void)
 ###**Progresses**
 
 ~~Statistics~~
+
 ~~Discrete Maith~~
+
 ~~Linear Algebra~~
+
 ~~Computer Architecture and Organization~~
+
 ~~C Basic~~
+
 ~~C# Basic~~
+
 ~~Java Basic~~
+
 ~~Python Basic~~
+
 Data Structures `On going`
-Algorithms ``status = ongoing``
+Algorithms ``ongoing``
 Advanced Statistics `On going`
 Advanced Linear Algebra `On going`
 
