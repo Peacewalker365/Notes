@@ -49,7 +49,7 @@
 - ~~C# Basic~~
 - ~~Java Basic~~
 - ~~Python Basic~~
-- ~~Simple ATm~~
+- ~~Simple ATM~~
 - ~~Console 2048~~
 - Simple ATM Rewrite `ongoing`
 - Data Structures `ongoing`
