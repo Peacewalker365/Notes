@@ -1,4 +1,54 @@
 
+关于C的函数套娃！以下为错误案例！
+
+```
+void LevelOne(Obj* ptr)
+{LevelTwo(ptr)}
+
+void LevelTwo(Obj* ptr){...}
+{LevelThree(&ptr)}
+
+void LevelThree(Obj** ptr){...}
+{......}
+
+
+int main(void)
+{
+    Object* ptr = BuildObjArr();
+    
+    LevelOne(ptr);
+}
+```
+
+上述code中，我们试图在第三层函数中对main中ptr指针本身进行修改。
+
+然而在第二层函数向第三层函数传参数时，传入的是第二层函数中（ptr的拷贝）的地址，并非main中ptr的地址，所以在第三层函数，我们操作的指针实际上是levelTwo中的ptr的内容！
+
+修改code应为
+```
+void LevelOne(Obj** ptrptr)
+{LevelTwo(ptrptr)}
+
+void LevelTwo(Obj** ptrptr){...}
+{LevelThree(ptrptr)}
+
+void LevelThree(Obj** ptrptr){...}
+{......}
+
+
+int main(void)
+{
+    Object* ptr = BuildObjArr();
+    
+    LevelOne(&ptr);
+}
+```
+当然，实际的code不需要这样实现，只要层层传入的参数是main中ptr的地址即可。
+
+
+
+
+
 
 ```
 void GetMemory( char *p )
