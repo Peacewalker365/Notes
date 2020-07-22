@@ -4,8 +4,8 @@
   - [X] Computer Architecture and Organization
   - [X] Data Structures
   - [X] Algorithms
-  - [ ] TCP/IP
-  - [ ] Designs
+  - [X] TCP/IP
+  - [X] Designs
   
 **2. Langs(Pick 3)**
   - [X] C/C++
