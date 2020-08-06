@@ -2328,16 +2328,23 @@ $限位符 匹配行尾
       grep -E [0-9a-zA-Z\_]+@[0-9a-zA-Z\_]+(\\.[0-9a-zA-Z\_]+){1, 3} mails.txt
    2. 过滤IP：建议用程序 不要用正则 太复杂 每一位是从0-255而不是0-999
 
+
+
 ### 字符的截取和替换
 
 1. cut 列提取命令
+
    - cut 选项 文件名
      - -f 列号
      - -d 分隔符：按照指定的分隔符分割列 默认为tab制表符 不识别空格
      - -c 字符范围： 不依赖分隔符来区分列，而是通过字符范围（行首为0）来进行字段提取 “n-”表示从第n个字符到行尾 同理“n-m” “-m”  不咋好用 每列的字符数不确定
+
 2. awk编程
+
    1. 概述
+
    2. printf格式化输出
+
       - printf '输出类型输出格式' 输出内容
         - 输出类型
           - %ns：输出字符串 n个字符
@@ -2352,3 +2359,469 @@ $限位符 匹配行尾
           - \t：Tab
           - \v：垂直Tab
         - printf '%s' $(cat test.txt)
+
+   3. awk的基本使用
+
+      1. awk '条件1 {动作1} 条件2 {动作2} ...' 文件名
+      2. 例子：  
+         awk ' {printf $2 "\\t" $6 "\\n"}' student.txt
+      3. df -h | awk " {printf $5 "\\n"}"
+      4. df -h | grep "dev/sda3" | awk ' {printf $5 "\\n"}' | cut -d "%" -f 1  
+         查看根分区的使用占比（假设根分区是sda3）
+
+   4. awk的条件
+
+      | 条件的类型 | 条件    | 作用                                         |
+      | ---------- | ------- | -------------------------------------------- |
+      | awk保留字  | BEGIN   | 在执行后续命令之前优先执行                   |
+      |            | END     |                                              |
+      | 关系运算符 | >       |                                              |
+      |            | <       |                                              |
+      |            | \>=     |                                              |
+      |            | \<=     |                                              |
+      |            | ==      |                                              |
+      |            | !=      |                                              |
+      |            | A~B     | 判断字符串A中是否包含能匹配B表达式的子字符串 |
+      |            | A!~B    |                                              |
+      | 正则       | /regex/ |                                              |
+
+      1. awk首先执行BEGIN 然后一行一行执行，先把整行给$0 然后每一列赋给对应的$n，然后进行条件判断例如$1 >= 80 或者 $3 ~ /name/ 然后执行相应的动作 最后则执行END
+      2. 当然条件里可以直接用正则 注意必须用/正则/括起来才能识别字符串  
+         awk ' /WangGang/ {printf $5 "\\n"}' student.txt  
+         这个相当于在整行里搜索包含WangGang的情况 如果有 输出那一行里对应的列
+
+   5. awk内置变量
+
+      | awk内置变量 | 作用                                                         |
+      | ----------- | ------------------------------------------------------------ |
+      | **$0**      | 目前awk所读入的整行数据                                      |
+      | **$n**      | 代表当前读入行的第n个字段                                    |
+      | **NF**      | 当前行拥有的子段总数                                         |
+      | **NR**      | 当前awk所处理的行，是总数据的第几行                          |
+      | **FS**      | 用户定义分隔符awk的默认分隔符是任何空格，如果想要使用其他分隔符如：就需要FS变量定义 |
+      | ARGC        | 命令行参数个数                                               |
+      | ARGV        | 命令行参数组数                                               |
+      | FNR         | 当前文件中的当前记录数（对输入文件起始为1）                  |
+      | OFMT        | 数值的输出格式 默认为%. 6g                                   |
+      | OFS         | 输出字段的分隔符 默认为空格                                  |
+      | ORS         | 输出记录分隔符 默认为换行符                                  |
+      | RS          | 输入记录分隔符 默认换行符                                    |
+
+      1. cat /etc/passwd | grep "/bin/bash" | awk ' {FS=":"} {printf $1 "\\n"}'  
+         这是有问题的，因为awk已经读入了$0才知道了分隔符是：所以第一行没处理成功  
+         cat /etc/passwd | grep "/bin/bash" | awk ' BEGIN {FS=":"} {printf $1 "\\n"}'  
+         cat /etc/passwd | grep "/bin/bash" | awk ' BEGIN {FS=":"} $3=="500" {printf $1 "\\n"}'  
+      2. 进阶：  
+         cat /etc/passwd | grep "/bin/bash" | awk ' BEGIN {FS=":"} {printf $1 "\\t" $3 "\\t 行号：" NR "\\t 字段数：" NF "\\n"}'    
+         字符串和转义字符需要放在双引号里 变量放在外面
+
+3. sed命令
+
+   - sed主要是用来将数据进行选取 替换  删除 新增的命令
+   - sed 选项 '动作' 文件名
+
+   | 选项          | 作用                                                         |
+   | ------------- | ------------------------------------------------------------ |
+   | -n            | sed默认会把所有数据都输出到屏幕，如果加入-n，则只会把经过sed处理的行输出到屏幕 |
+   | -e            | 允许对输入数据应用多条sed命令编辑                            |
+   | -f 脚本文件名 | 从sed脚本中读入sed操作，和awk中的-f非常类似                  |
+   | -r            | 在sed中支持扩展正则表达式                                    |
+   | -i            | 用sed的修改结果直接修改读取数据的文件而不是输出到屏幕上      |
+   | **动作**      |                                                              |
+   | a \           | 追加 在当前行后添加一行或多行 添加多行时 用\表示数据未完结 也就是换行 |
+   | i \           | 插入                                                         |
+   | d             | 删除                                                         |
+   | p             | 打印 输出指定行                                              |
+   | s             | 字串替换 用一个字符串替换另外一个字符串，格式为“行范围 s/旧字串/新字串/g” |
+
+   - 例子：
+     - sed -i -e '3d ; 4d' test.txt
+       - 注意 -e需要挨着命令
+     - sed -n '2, 5d' test.txt
+     - sed 's/LiGang/WangGang/g' test.txt
+
+
+
+### 字符处理命令
+
+1. 排序命令sort
+   - sort 选项 文件名
+     - -f 忽略大小写
+     - -b 忽略行前空白部分
+     - -n 以数值型进行排序，默认使用字符串型排序
+     - -r 反向排序
+     - -u 删除重复行 就是uniq命令
+     - -t 指定分隔符，默认时制表符
+     - -k n, m 按照指定的字段范围排序，从n字段开始到m字段结束 如果不输入, m 就默认到行尾
+   - sort -n -k 3, 3 /etc/passwd
+     - 如果不用-n是按照字段的首字母进行排序 导致11排在2前面
+2. uniq
+   - uniq 选项 文件名
+3. 统计 wc
+   - wc 选项 文件名
+     - -l 只统计行数
+     - -w 只统计单词数
+     - -m 只统计字符数
+
+
+
+### 条件判断 test 或者 [测试选项 文件名]
+
+1. 按照文件类型进行判断
+
+   | 测试选项    | 作用                                    |
+   | ----------- | --------------------------------------- |
+   | -b 文件     | 是否块设备                              |
+   | -c 文件     | 是否字符设备文件                        |
+   | **-d 文件** | 是否目录 目录为真  [-d abc] 然后echo $? |
+   | **-f 文件** | 是否普通文件                            |
+   | **-L 文件** | 是否为符号链接文件                      |
+   | -p 文件     | 是否为管道文件                          |
+   | **-s 文件** | 是否文件为空 非空为真                   |
+   | -S 文件     | 是否为套接字文件                        |
+   |             |                                         |
+
+2. 按照文件权限判断
+
+   | 测试选项    | 作用                                                         |
+   | ----------- | ------------------------------------------------------------ |
+   | **-r 文件** | 判断该文件是否存在，并且是否该文件拥有读权限 有为真 注意判断的整个文件的权限 无法具体区分是所有者所属组和其他的 |
+   | **-w 文件** | 写                                                           |
+   | **-x 文件** | 执行                                                         |
+   | **-u 文件** | SUID                                                         |
+   | **-g 文件** | GUID                                                         |
+   | **-k 文件** | SBit                                                         |
+   |             |                                                              |
+
+3. 两个文件之间进行比较
+
+   | 测试选项            | 作用                                            |
+   | ------------------- | ----------------------------------------------- |
+   | **文件1 -nt 文件2** | 判断文件1的修改时间是否比文件2新 新为真         |
+   | 文件1 -ot 文件2     | 旧为真                                          |
+   | **文件1 -ef 文件2** | 判断inode是否一致 一致为真 是判断硬链接的好方法 |
+
+4. 两个整数之间的比较
+
+   | 测试选项            | 作用              |
+   | ------------------- | ----------------- |
+   | **整数1 -eq 整数2** | 是否相等 相等为真 |
+   | **整数1 -ne 整数2** | 不相等为真        |
+   | **整数1 -gt 整数2** | 整数1>整数2 为真  |
+   | **整数1 -lt 整数2** | 小于为真          |
+   | **整数1 -ge 整数2** | 大于等于为真      |
+   | **整数1 -le 整数2** | 小于等于为真      |
+
+5. 字符串的判断
+
+   | 测试选项       | 作用                                                 |
+   | -------------- | ---------------------------------------------------- |
+   | -z 字符串      | 是否为空 为空为真                                    |
+   | **-n  字符串** | 非空为真                                             |
+   | 字串1 == 字串2 | 判断字符串1是否和字符串2相等 相等为真 ["$a" == "$b"] |
+   | 字串1 != 字串2 | 不等为真                                             |
+
+6. 多重判断
+
+   | 测试选项       | 作用        |
+   | -------------- | ----------- |
+   | 判断1 -a 判断2 | 与 皆真为真 |
+   | 判断1 -o 判断2 | 或          |
+   | ！判断         | 非          |
+
+
+
+### 流程控制
+
+1. if 条件判断
+
+   - 单分支
+
+     - ```bash
+       #!/bin/bash
+       if [condition]
+       	then
+       		#code
+       fi
+       ```
+
+     - example:   
+
+       ```bash
+       #!/bin/bash
+       
+       aa=$(df -h | grep /dev/sda3 | awk ' {printf $5 "\n"' | cut -d "%" -f 1)
+       
+       if ["%aa" -ge 80]
+       	then
+       		echo "greater than 80 !"
+       fi
+       ```
+
+       chmod 755 example.sh  
+       ./example.sh
+
+   - 双分支
+
+     ```bash
+     #!/bin/bash
+     if [condition]
+     	then 
+     		#code
+     else
+     	#code
+     fi
+     ```
+
+     - example(稍微不太合理 只是个例子) 备份mysql  
+
+       ```bash
+       #!/bin/bash
+       
+       ntpdate asia.pool.ntp.org &>/dev/null
+       #同步时间
+       
+       date=$(date +%y%m%d)
+       #日期按照年/月/日格式
+       
+       size=$(du -sh /var/lib/mysql)
+       #统计mysql数据库的大小
+       
+       if [-d /tmp/dbbak]
+       #判断备份目录是否存在，是否为目录
+       	then
+       		#如果为真执行一下脚本
+       		echo "Date: $date!" > /tmp/dbbak/dbinfo.txt
+       		#把当前日期写入临时文件
+       		echo "Data size: $size" >> /tmp/dbbak/dbinfo.txt
+       		#把大小写入
+       		cd /tmp/dbbak
+       		#进入备份目录
+       		tar -zcf mysql-lib-$date.tar.gz /var/mysql dbinfo.txt &>/dev/null
+       		#打包压缩数据库与临时文件
+       		#注意/dev/null相当于垃圾站 把命令的输出丢进垃圾站就会屏蔽它 但是报错会正常报错 写脚本很常用
+       		rm -rf /tmp/dbbak/dbinfo.txt
+       		#删除临时文件
+       else
+       	mkdir /tmp/dbbak
+       	#如果判断为假，则建立备份目录
+       	echo "Date: $date!" > /tmp/dbbak/dbinfo.txt
+       	echo "Date size: $size" >> /tmp/dbbak/dbinfo.txt
+       	#保存数据库大小和当前日期
+       	cd/tmp/dbbak
+       	tar -zcf mysql-lib-$date.tar.gz dbinfo.txt /var/lib/mysql &>/dev/null
+       	rm -rf /tmp/dbbak/dbinfo.txt
+       fi
+       #问题是 备份和原始数据在一块硬盘里 而且只能完全备份
+       ```
+
+     - exmple2 每五分钟检测apache有没有当机并重启
+
+       ```bash
+       #!/bin/bash
+       
+       aa=$(netstat -tuln | awk ' {printf $4 "\n"}' | grep ":80&")
+       
+       if ["$aa" == ""]
+       	then
+       		echo "httpd is down, restarting..."
+       		/etc/tc.d/init.d/httpd start &>/dev/null
+       else
+       	echo "httpd is working fine"
+       fi
+       ```
+
+     - nmap -sT 192.168.4.210
+
+       - 扫描本机所有端口 看看有无应答  
+         $(nmap -sT 192.168.4.210 | grep tcp | grep httpd | awk ' printf $2 "\\n"') == "open"  
+         判断有无应答 因为有的时候虽然服务开启 访问量量过大会导致无应答
+
+   - 多分支
+
+     ```bash
+     if [condition]
+     	then
+     		do
+     elif
+     	do
+     else
+     	do
+     fi
+     ```
+
+
+
+### Primitive Calculator
+
+```bash
+#!/bin/bash
+#Command line calculator Ver0.1
+
+read -t 30 -p "Please enter the first operand: " num1
+read -t 30 -p "Please enter the operator: " op
+read -t 30 -p "Please enter the second operand: " num2
+
+if [ -n "$num1" -a -n "$num2" -a -n "$op" ]
+	then
+	ifInt1=$(echo $num1 | sed ' s/[0-9]//g')
+	ifInt2=$(echo $num2 | sed ' s/[0-9]//g')
+	
+	if [ "$ifInt1" == "" -a -z "$ifInt2" ]
+		then
+		if [ "$op" == "+" ]
+			then 
+			result=$(($num1 + $num2))
+		elif [ "$op" == "-" ]
+			then
+			result=$(($num1 - $num2))
+		elif [ "$op" == "*" ]
+			then
+			result=$(($num1 * $num2))
+		elif [ "$op" == "/" ]
+			then
+			result=$(($num1 / $num2))
+		else
+			echo "Please enter a valid operator"
+			exit 11
+		fi
+	else
+		echo "Please enter valid operands"
+		exit 11
+	fi
+else
+	echo "Please assign all 3 variables properly"
+	exit 11
+fi
+
+echo "$num1 $op $num2 = $result"
+```
+
+
+
+### Case Statement
+
+- ```bash
+  case $var in
+  	"val1")
+  		do
+  		;;
+  	"val2")
+  		do
+  		;;
+  	"val3")
+  		do
+  		;;
+  	*)
+  		do
+  		;;
+  esac
+  ```
+
+
+
+### for loop
+
+- ```bash
+  #Most common one for system maintenance
+  for var in val1 val2 val3 ...
+  	do
+  		echo $var
+  	done
+  ```
+
+- ```bash
+  #Common in other langs
+  s=0
+  for (( i=1;i<=100;i=i+1 ))
+  	do
+  		echo s=$(( $s + $i ))
+  	done
+  ```
+
+- ```bash
+  #Batch decompressing
+  #ls *.tar.gz > tar.log
+  #ls *.tgz >> tar.log &>/dev/null
+  aa=$( cat /root/sh/tar/tar.log | wc -l)
+  
+  for((i=1;i<="$aa";i=i+1))
+  do
+  	bb=$( cat tar.log | awk 'NR=="$i" {printf $1 "\n"}' )
+  	tar -zxvf $bb -C /root/sh/tar
+  done
+  
+  #The better version
+  ls *.tar.gz > tar.log
+  
+  for i in $(cat tar.log)
+  do
+  	tar -zxvf $i
+  done
+  
+  #This is why you'll see the first type of for loop way more often... it would be silly to use it for arithmetic purposes though
+  ```
+
+- ```bash 
+  #!/bin/bash
+  #Legal IP filter
+  #Use regex as a sketchy filter
+  
+  grep "^[0-9]\[1,3\].[0-9]\[1,3\].[0-9]\[1,3\].[0-9]\[1,3\]$" /root/sh/ip.txt > /root/sh/ip_test1.txt
+  
+  #Get the num of IPs we got
+  line=$(wc -l /root/sh/ip_test1.txt | awk ' {printf $1 "\n"}')
+  #line=$(cat ip_test1.txt | wc -l)
+  
+  #Get your final file ready
+  echo "" > /root/sh/ip_test.txt
+  
+  for (( i=1;i<$line;i=i+1 ))
+  #for i in $(cat /root/sh/ip_test1.txt)
+  do
+  	cat /root/sh/ip_test1.txt | awk 'NR=='$i'{print}' > /root/sh/ip_test2.txt
+  	#In the file, there lies the only one IP of the ith column
+  	#Type 2 for-loop body starts from here
+  	a=$( cat /root/sh/ip_test2.txt | cut -d '.' -f 1)
+  	b=$( cat /root/sh/ip_test2.txt | cut -d '.' -f 2)
+  	c=$( cat /root/sh/ip_test2.txt | cut -d '.' -f 3)
+  	d=$( cat /root/sh/ip_test2.txt | cut -d '.' -f 4)
+  	
+  	if [ "$a" -lt 1 -o "$a" -gt 255 ]
+  		then
+  			continue
+  	fi
+  	
+  	if [ "$b" -lt 0 -o "$b" -gt 255 ]
+  		then
+  			continue
+  	fi
+  	
+  	if [ "$c" -lt 0 -o "$c" -gt 255 ]
+  		then
+  			continue
+  	fi
+  	
+  	if [ "$d" -lt 0 -o "$d" -gt 255 ]
+  		then
+  			continue
+  	fi
+  	
+  	cat /root/sh/ip_test2.txt >> /root/sh/ip_test.txt
+  	
+  done
+  
+  rm -rf /root/sh/ip_test1.txt
+  rm -rf /root/sh/ip_test2.txt
+  
+  #To be validated...
+  ```
+
+- ```bash
+  #batch adding a fixed number of users
+  
+  
+  ```
+
+- 
+
