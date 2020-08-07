@@ -213,16 +213,19 @@ Sphinx — 中文分词（主要是用来做搜索引擎）（见喜欢迎 —> 
 
   1. ls -l
   	1. 七列数据
-    		1. 权限
-      		2. 引用计数
+        		1. 权限
+                 		2. 引用计数
         			1. 文件的引用计数代表该文件的硬链接个数
-          			2. 目录的引用计数代表该目录有多少个一级子目录（注意 有隐藏子目录）
-            		3. 所有者 默认为文件的创建者
-              		4. 所属组 默认所属组是文件建立用户的有效组，一般情况下是建立用户的所属组
-                		5. 文件大小 默认单位byte
-                  			1. -h 人性化显示 自动优化大小显示
-                    		6. 修改时间和访问时间中最紧的
-                      		7. 文件名
+                        
+                        
+                                 			2. 目录的引用计数代表该目录有多少个一级子目录（注意 有隐藏子目录）
+                		3. 所有者 默认为文件的创建者
+                         		4. 所属组 默认所属组是文件建立用户的有效组，一般情况下是建立用户的所属组
+                        		5. 文件大小 默认单位byte
+                        			1. -h 人性化显示 自动优化大小显示
+                                               		6. 修改时间和访问时间中最紧的
+                                		7. 文件名
+                  
                         **选项是用于调整命令的功能的**
                         ls下支持的部分常用选项
                         	-a 显示所有文件
@@ -2820,8 +2823,329 @@ echo "$num1 $op $num2 = $result"
 - ```bash
   #batch adding a fixed number of users
   
+  read -t 30 -p "User name: " name
+  read -t 30 -p "Number of users: " num
+  read -t -30 -p "Password: " pwd
+  
+  if [ -n "$name" -a ! -z "$pwd" -a -n "$num" ]
+  	then
+  	y=$(echo $num | sed ' s/[0-9]//g')
+  	if [ -z "$y" ]
+  		then
+  		for (( i=1;i<$num;i=i+1 ))
+  			do
+  				/usr/sbin/useradd $name$i &>/dev/null
+  				echo $pwd | /usr/bin/passwd --stdin $name$i &>/dev/null
+  				chage -d 0 $name$i &>/dev/null
+  			done
+  	fi
+  fi
+  ```
+
+- ```bash
+  #!/bin/bash
+  #Batch deleting users. Avoid deleting root and system users
+  
+  user=$(cat /etc/passwd | grep "/bin/bash" | grep -v "root" | cut -d ":" -f l)
+  
+  for i in $user
+  	do
+  	 userdel -r $i
+  	done
+  ```
+
+
+
+### while loop
+
+- ```bash
+  while [condition]
+  	do
+  	 code
+  	done
+  ```
+
+- Not common since it's for arithmetic mainly.
+
+
+
+### until loop
+
+- ```bash
+  until [condition]
+  	do
+  		code
+  	done
+  ```
+
+
+
+### Function
+
+- ```bash
+  function func {
+  	echo $1
+  }
+  func Hello
+  func World
   
   ```
 
-- 
+- ```bash
+  func () {
+  	echo Hello $1
+  	local var = 'local'
+  }
+  
+  var = 'global'
+  func Mars
+  ```
 
+
+
+Other Flow Control Commands
+
+1. exit
+   - exit [value]
+   - exit the current script
+
+2. break
+   - Jump out of the current loop completely
+3. continue
+   - End the current iteration(1 time execution of loop) and execute the next in the loop if possible
+
+
+
+## 启动引导和系统修复
+
+### 概念
+
+1. 系统运行级别	
+
+   - | 运行级别 | 含义                                               |
+    | -------- | -------------------------------------------------- |
+   | 0        | 关机                                               |
+   | 1        | 单用户模式，主要用于系统修复 （对表win的安全模式） |
+   | 2        | 不完全的命令行模式，不含NFS服务                    |
+   | 3        | 完全的命令行模式，就是标准字符界面                 |
+   | 4        | 系统保留                                           |
+   | 5        | 图形模式                                           |
+   | 6        | 重启动                                             |
+   
+   - runlevel
+      - x y
+      - x is the previous level before entering the current one
+      - y is the current runlevel
+   
+   - init n
+      - enter level n
+      - not safe using this to reboot
+
+2. System Default Runlevel
+   
+   - /etc/inittab
+3. /etc/rc.local or /etc/rc.d/rc.local
+   - This will be executed before user login
+   - You can run apache while system starts by edit this file
+
+### Boot Loader 启动引导程序
+
+1. /boot/grub
+
+   - boot/grub/grub.conf & menu.lst (soft link)
+     - partition representation
+       - hd(x,y)
+         - x for the number of current SCSI disk starting from 0
+         - y for the current partition starting from 0
+           - 0 - 3 for primary partition
+           - 4 -    for logic partition
+
+2. /boot/grub/splash.xpm.gz
+
+   - The background of booting interface
+
+3. grub configuration
+
+   - Notice that you cannot do anything through distant control since the network module has't been loaded yet
+
+   - default=0
+     - boot the first sys as default after x seconds if no choce was made
+   - timeout=5
+     - waiting time of selecting  sys
+     - if it's -1, sys will wait till any decision is made
+   - splashimage=(hd0,0) /grub/splash.xpm.gz
+     - where the background image is located
+   - hiddenmenu
+     - by default, the menu is hidden, you can see the counting only. cancel it by commenting the line.
+   - title
+     - display this for the corresponding sys
+   - root *(hd0,0)*
+     - where is the root directory
+     - notice it doesn't stand for the root user
+   - kernal _content_
+     - /vnlinuz-2.6.32-279.el6.i686
+       - indicate the location of the kernal files
+       - and the '/' means /boot here
+     - ro
+       - mount the /boot as read-only
+     - it bans RAID, LVM... that's why you can only mount your /boot on the primary partition when installing the sys
+     - root=UUID.....
+     - KEYBOARDTYPE=pc KEYTABLE=US
+     - LANG
+       - language env
+     - rhgb
+       - use image to substitute the literal info
+       - you can check the literals with command *dmesg*
+     - quiet
+       - hide the boot messages except the important ones
+     - initrd/initramfs....
+       - indicate the location of the *img* of the memory files
+
+4. grub encryption
+
+   - grub-md5-crypt
+
+   - Then the sys will show the md5 code
+
+   - copy it
+
+   - vim /etc/grub.config
+
+   - put it at the line after "timeout=5" as below  
+     password --md5 *here is the md5 code*
+
+   - now if you want to edit the passwd while the grub interface, a password is needed
+
+   - if you add lock after the title... that would be a disaster since you need the password for booting and the distant tool cannot connect...   
+     Check the flight LOL
+
+     | 系统密码-->    | grub密码-->      | BIOS密码   |
+     | -------------- | ---------------- | ---------- |
+     | 单用户模式破解 | 光盘安全模式破解 | 扣主板电池 |
+
+   
+
+### System Repair
+
+1. Single User Mode
+   - runlevel 1
+   - Need to be with the server pysically
+   - at grub interface enter the os
+   - press e to edit
+   - append ' 1' after the quiet
+   - notice there is a space between quiet and 1
+   - it means to enter runlevel 1 this time (cause it's a temporally change, edit the config file to change it permanently)
+   - passwd root
+   - reboot
+2. CD-ROM Repair
+   - Need to pysically be with the server
+   - BIOS --> boot from CD
+   - Rescue install mode
+   - continue
+   - start shell
+   - Notice we did not enter the real /  
+     the CDROM simulated this one
+   - chroot /mnt/sysimage
+   - change the root to the real one since the it's treated as an external device
+   - do whatever you need to repair the sys
+
+
+
+## Services Management System 服务管理系统
+
+### Classification
+
+1. RPM package installed
+   1. Independent
+      - directly listed in memory
+      - chkconfig --list
+        - if there shows 0-6, it's a inde service
+          - notice that 0-6 show the options under different runlevel
+   2. Based on xinetd
+      - only xinetd service is on memory, other services will be managed by it (Not the mainsteam now since the server is much more powerful and there is no need to save that little memory)
+2. Source code package installed
+
+
+
+### Services installed by RPM
+
+#### Independent Services
+
+1. start
+
+   1. /etc/init.d/*serviceName* start
+   2. service *serviceName* start|stop|restart|...
+
+2. automatic
+
+   1. chkconfig --level *runlevelNum* *serviceName* on|off
+      - **Next time** of booting it will run automatically
+   2. /etc/rc.local
+      - add a standard way of starting
+      - **This method is recommended**
+   3. ntsysv
+
+   - Notice: ckconfig cannot check the service started by /etc/rc.local, vise-versa
+   - And Only one way for the auto start, if it's started more than once, you'll earn your error message
+
+#### xinetd
+
+- I don't care about it because no one will use it nowadays
+
+#### Example of Apache
+
+- /etc/rc.d/init.d/httpd
+
+
+
+### Services installed by Source Code
+
+1. start
+   1. start by the command (check its offical docs)
+      - /usr/local/apache2/bin/apachectl start|stop|restart|...
+2. auto
+   - vim /etc/rc.local
+     - add --> /usr/local/apache2/bin/apachectl start
+3. let the source code service be recognized  by service & chkconfig & ntsysv (**not recommended since you can not distinguish RPM and Source code versions of services**)
+   1. ln -s /usr/local/apache2/bin/apachectl /etc/rc.d/init.d/
+      - now it's good with service command
+   2. vim /etc/rc.d/init.d/apachectl
+      - add --> chkconfig: 35 86 76
+        - 35 is the runlevel 3 and 5
+        - 86 is the starting sequence, just make sure it's not conflict with other services
+        - 76 is the ending sequence, notice the same thing above
+      - chkconfig --add apachectl
+      - chkconfig --list | grep "apachectl"
+      - now should be good with chkconfig & ntsysv
+
+
+
+### Common Services in Linux
+
+- | Service Name                                                 | Function | Recommendation |
+    | ------------------------------------------------------------ | -------- | -------------- |
+  | [See here](https://www.bilibili.com/video/BV1ut411a7ro?p=169) |          |                |
+  |                                                              |          |                |
+  |                                                              |          |                |
+  |                                                              |          |                |
+  |                                                              |          |                |
+  |                                                              |          |                |
+  |                                                              |          |                |
+  |                                                              |          |                |
+  |                                                              |          |                |
+
+
+
+## System Management
+
+### Process Management
+
+1. What is process
+2. The functions of porcess management
+   1. check if the system is running healthy
+      - 70/90 principle: mem < 70%   cpu < 90%  
+        change it with your needs
+   2. check all processes status
+   3. kill a process (**rare**)
+3. Check a process
+   1. 
