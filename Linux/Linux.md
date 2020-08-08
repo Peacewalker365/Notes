@@ -3138,7 +3138,7 @@ Other Flow Control Commands
 
 ## System Management
 
-### Process Management
+### Process
 
 1. What is process
 2. The functions of porcess management
@@ -3148,4 +3148,235 @@ Other Flow Control Commands
    2. check all processes status
    3. kill a process (**rare**)
 3. Check a process
-   1. 
+   1. ps command
+      - ps aux
+        - no '-'
+        - a: show all processes on the terminal except 会话引线
+        - u: show the owner of the processes and mem usage
+        - x: show the processes without terminal control
+      - USER
+      - PID
+      - %CPU
+      - %MEM
+      - VSZ: the virtual mem occupied
+      - RSS: the physical mem occupied
+      - TTY: on which terminal it runs
+        - if it's ?, means it is started by the kernal
+      - STAT: status od the process
+        - D: sleep status that cannot be awoke
+        - R: running
+        - S: sleep
+        - ... check the docs
+      - START
+      - TIME
+      - COMMAND (usually the most useful part to know what on earth is the process you are looking at)
+   2. top command
+      1. -d n: n is the number of seconds to refresh, set to 3 by default
+      2. [too lazy today...check here](https://www.bilibili.com/video/BV1ut411a7ro?p=172)
+      3. the most important parts are average loads, cpu idle, mem and swap free
+      4. interaction
+         1. P: sorted by CPU usage
+         2. M: sorted by mem usage
+         3. q: quit
+      5. options
+         1. -p pid: check a specific process
+         2. -b
+         3. -n
+         4. common use: top -b -n 1 > test
+   3. pstree -p
+
+
+
+### Process Management
+
+1. check signal: kill -l
+   - SIGHUP: shutdown the process immediately, read the config file and reboot
+   - SIGKILL: to end a process at once, this signal cannot be stopped, processed, or ignored. common for terminate processes forcedly
+2. kill process
+   1. kill signal PID
+      1. kill -9 53734 forcedly shutdown a process
+   2. killall option signal processName
+      1. -i: interactive
+      2. -I: ignore the capitalization of processName
+      3. kill -9 httpd (common for kill processes of a service)
+   3. pkill option signal processName
+      1. -t: terminal number
+         - pkill -9 -t pts/1 (common for kick out users)
+         - kick out the distant terminal pts/1
+
+
+
+### Jobs Management
+
+- [Cautions](https://www.bilibili.com/video/BV1ut411a7ro?p=174)
+- Put command to backstage
+  - command &
+  - ctrl+z: pause and put it to backstage
+- Query
+  - ​	jobs command
+    - jobs -l
+    - check all backstage services with PID
+- Recover
+  - fg %jobNum: put the job back to frontstage
+  - bg %jobNum: recover the stopped backg3round job to excute
+- Seperate the job from terminals
+  - edit the /etc/rc.local (drawback: need to reboot)
+  - realize through system tasks
+  - nohup [command] &
+
+
+
+### System Resource Query
+
+1. vmstat refreshDelay refreshTimes
+   - vmstat 1 3
+     - refresh every sec for 3 times
+2. dmesg | grep keywords
+   - get info from booting messages
+3. free -h
+4. /proc/cpuinfo
+5. /proc/meminfo
+6. uptime
+7. uname   this is kernalinfo
+   1. -a
+   2. -r
+8. file /bin/ls
+   - check if the os is 32-bit or 64-bit
+9. lsb_release -a
+   - check the release ver
+
+
+
+### 系统定时任务
+
+1. at 一次性执行定时任务
+   1. at 服务管理与访问控制
+      - at 是由atd服务支持的 首先启动atd 或者将它设置为自启动 当然 一般是默认启动的
+        - service atd start
+        - chkconfig atd on
+      - at 的访问控制
+        - /etc/at.deny 
+        - /etc/at.allow 默认不存在
+          - 他的优先度高
+          - 一旦存在 只有写入这个文件的用户能执行at
+          - 还得在文件中手动加入用户
+        - 如果两个文件都没有，则只有root能使用at
+   2. at 选项 时间
+      - -m 工作完成后 email通知
+      - -c 工作号 显示at工作的实际内容
+      - 时间的格式
+        - HH:MM
+        - HH:MM[am|pm] [month] [date]
+        - HH:MM[am|pm] + [minutes|hours|days|weeks] 在指定的时间再加多久执行
+      - 输入命令内容
+      - ctrl+D发送
+   3. 查询at任务
+      - at -c
+      - atq
+   4. 删除
+      - atrm 工作号
+2. **crontab循环定时任务**
+   1. 服务管理和访问控制
+      1. 由crond服务支持
+         - service crond restart
+         - chkconfig crond on
+      2. /etc/cron.deny & /etc/cron.allow
+   2. 用户的crontab设置
+      - -e：编辑crontab定时任务
+      - -l：查询
+      - -r：删除当前用户所有的crontab任务，如果有多的任务只想删除一个，可以用 crontab -e
+      - -u 用户名：修改或删除其他用户的crontab任务 只有root可以用
+      - 或者可以用root修改/etc/crontab  并且可以指定其他用户来执行
+      - **格式：\* \* \* \* \* 执行的任务**
+        - 一小时中的第几分钟 0-59
+        - 一天中的第几个小时 0-23
+        - 一个月当中的第几天 1-31
+        - 一年当中的第几个月 1-12
+        - 一周中的星期几 0-7
+      - 10 \* \* \* \* 命令 代表每个小时的第10分钟执行一次
+      - 0 8, 12, 16 \* \* \* 命令 代表每天的8点0分 12点0分 16点0分 都执行一次
+      - 0 5 \* \* 1-6 命令 周一到周六5点执行
+      - \*/10 \* \* \* \* 命令 每隔10分钟 执行一次
+      - 0 0 1, 15 \* 1 命令 每个月的1号15号和每周1都会执行！最好不要这么写 因为容易搞晕别的管理员
+   3. 注意事项
+      1. 六个选项都不能为空 不确定就用*
+      2. 最小是分钟 最大是月 没法确定年和秒
+      3. 星期和天不要同时出现 便于理解
+      4. 定时任务 所有都用绝对路径
+   4. 系统的crontab设置
+      1. crontab -e 是每个用户执行的命令
+      2. 其他两种方法
+         1. 直接修改/etc/crontab
+            - 修改配置文件 定时任务的执行者默认是当前用户
+            - 0 \* \* \* \* root runparts /etc/cron.hourly/
+            - 每小时0分钟 用root用户的身份 用runparts脚本 执行目录下的每一个
+         2. 把脚本放入相应的执行目录 /etc/cron.hourly/或者/etc/cron.daily/等  
+            但是没法设置具体的时间，是系统自己决定的
+3. anacron
+   - /var/spool/anacron
+   - 如果该执行任务的时候因为某种任务没有执行 比如关机了 它会检测所有的定时任务，看情况补上没执行的任务
+   - 新版本/etc/cron.{hourly｜daily｜weekly}是由anacron自动调用的 以防止cron和anacron重复执行任务发生报错
+   - anacron 选项 工作名
+     - /etc/anacrontab
+       - RANDON_DELAY=45 开机之后45分钟内任意时间开始执行第一个任务 然后45分钟内执行第二个...以此类推
+       - START_HOURS_RANGE=3-22 允许执行时间为3点到22点
+
+
+
+## 日志管理
+
+### 简介
+
+- LAMP下的ELK的日志分析工具
+
+1. 常见日志
+
+    
+
+   | 日志文件         | 作用                                                         |
+   | ---------------- | ------------------------------------------------------------ |
+   | /var/log/cron    | 定时文件                                                     |
+   | /var/log/cups/   | 打印信息                                                     |
+   | /var/log/btmp    | 记录错误登陆日志 二进制文件 要用lastb命令查看                |
+   | /var/log/lastlog | 所有用户最后登陆时间的日志 lastlog查看                       |
+   | /var/log/mailog  | 邮件信息                                                     |
+   | /var/log/message | 系统重要信息日志 如果系统出现问题 首先查这个                 |
+   | /var/log/secure  | 记录验证和授权方面的信息 涉及账号密码的程序都会记录 例如系统登陆 sudo授权 切换用户等 |
+   | /var/log/wtmp    | 永久记录所有用户的登陆注销信息 系统的启动重启关机事件 用last查看 |
+   | /var/log/utmp    | 记录当前已登陆用户的信息 注意 只记录当前登陆用户的信息 会随着用户的登录和注销不断变化 要用w who users等命令查询 |
+
+2. RPM产生的日志 在/var/log/相应的位置
+3. 源码包的日志全部在手工安装的目录下
+
+
+
+### 日志服务rsyslogd
+
+1. 格式
+2. 配置文件/etc/rsyslog.conf
+   - [规则和日志等级](https://www.bilibili.com/video/BV1ut411a7ro?p=183)
+   - [内容解释](https://www.bilibili.com/video/BV1ut411a7ro?p=184)
+
+### 日志轮替
+
+- 把旧的日志文件移动并改名，同时建立新的空日志文件，当旧日志文件超出保存的范围之后，就会进行删除
+- 注意源码包的日志文件要手动加入轮替的配置文件
+  - 命名-->/etc/logrotate.conf配置文件中的dateext参数
+    - 日志会变成 logname-20200806
+- /etc/logrotate.conf
+  - 如果没写自己的轮替时间 就按开始自带写入的weekly
+  - 其他同理
+  - 打开看了看 很简单 没必要记了[参考](https://www.bilibili.com/video/BV1ut411a7ro?p=186) 写的时候 参考一下轮替代码里的命令
+  - 平滑重启：  
+    /bin/kill -HUP $(/bin/cat /usr/local/nginx/logs/nginx.pid) &>/dev/null  
+    如果有人正在访问 会等访问进程结束之后再重启服务
+    - 注意：在重启服务**之前**也要重启rsyslogd  
+      postrotate  
+          /bin/kill -HUP `cat /var/run/syslogd.pid 2> /dev/null` 2> /dev/null || true  
+      endscript
+- 加入自己的日志轮替
+  - 先写好自己的配置文件
+  - logrotate 选项 配置文件名
+    - -v：显示日志轮替过程
+    - -f：强制进行日志轮替 不管是否已经符合条件
+
