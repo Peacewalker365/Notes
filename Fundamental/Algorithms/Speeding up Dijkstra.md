@@ -34,7 +34,7 @@ How to fix it?
 
 - **find an x (possibly diff from w) that has minimum value of df[x] + db[x]**
 
-#### Goal-Directed Search: Potentials, Landmarks
+#### Goal-Directed Search: Potentials, Landmarks (or A*)
 
 -modify edge weights with potential functions  
 W(u,v) = w(u,v) - 𝜆(u) + 𝜆(v)
