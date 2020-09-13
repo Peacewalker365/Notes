@@ -645,3 +645,42 @@ We can uses ER Diagrams to design database schemas
 
 #### Designing an ERD
 
+
+
+#### Converting ERD to Schema
+
+![ConvertingERD](/Users/wenchaoli/Desktop/Images/ConvertingERD.png)
+
+![ConvertedERD](/Users/wenchaoli/Desktop/Images/ConvertedERD.png)
+
+1. mapping of regular entity types
+   - For each regular entity type create a relation(table) that includes all the simple attributes of that entity
+2. mapping of weak entity types
+   - For each weak entity type create a relation(table) that includes all simple attributes of the weak entity
+   - The primary key of the new relation should be the partial key of the weak entity plus the primary key of its owner
+   - in this case, we have the branch_id and supplier_name come together as a composite key
+3. mapping of Binary 1:1 relationship types
+   - include one side of the relationship as a foreign key in the other favor total participation, which mean the table of which has a total participation will include the primary key of the other as a foreign key
+4. mapping of Binary 1:n relationship types
+   - inlcudes 1's side's primary key as the n's side's foreign key
+5. mapping of Binary m:n relationship types
+   - create a new relation who's primary key is a combination of both entites' primary key.  
+     also include any relationship attributes
+6. link all foreign keys to the place it points to if it's not messy...
+
+**NOTICE: This is a basic ERD, so there may be more advanced and complex ERD in a real situation, keep up your self-learning pace.**
+
+[Explanation](https://www.youtube.com/watch?v=HXV3zeQKqGY)
+
+
+
+读写分离（atlas）---垂直分库---垂直分表---水平分表
+
+了解：主从，atlas，高可用
+
+[mysql+redis+mongoDB+TCP/IP](https://www.bilibili.com/video/BV1GJ411K7it?p=8)
+
+[another](https://www.bilibili.com/video/BV157411K7sf?p=172)
+
+
+
