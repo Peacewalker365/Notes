@@ -39,24 +39,14 @@
   
   
 ###**Progresses**
-
-- ~~Statistics~~
-- ~~Discrete Maith~~
-- ~~Linear Algebra~~
-- ~~Computer Architecture and Organization~~
-- ~~C Basic~~
-- ~~C# Basic~~
-- ~~Java Basic~~
-- ~~Python Basic~~
-- ~~Simple ATM~~
-- ~~Console 2048~~
-- ~~Data Structures 
-- ~~Algorithms 
-- ~~Adv Statistics 
-- ~~Adv Linear Algebra 
-- ~~C# Advanced 
-- ~~CUDA Intro with Projs
-- ~~Build Hadoop Cluster on Azure (emo analysis proj)
-- ~~SQL
+- [X] Adv Statistics 
+- [X] Adv Linear Algebra 
+- [X] C# Advanced 
+- [X] CUDA Intro with Projs
+- [X] Build Hadoop Cluster on Azure (emo analysis proj)
+- [X] SQL
+- [ ] Go
+- [ ] More Design Patterns
+- [ ] Spring5/Spring Boot2
 
 
