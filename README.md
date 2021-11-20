@@ -6,6 +6,8 @@
   - [X] Algorithms
   - [X] TCP/IP
   - [X] Designs
+  - [x] OS
+  - [x] Secure Coding
   
 **2. Langs(Pick 3)**
   - [X] C/C++
@@ -17,20 +19,19 @@
 
 **3. Shells**
   - [X] Zsh
-  - [ ] Bash
-  - [ ] SSH
+  - [x] Bash
+  - [x] SSH (SFP SCP...)
   
 **4. IDEs/Text Editors**
   - [X] IntelliJ IDEA
-  - [ ] VS
   - [X] VSCode
-  - [ ] Vim
-  - [ ] jGRASP
+  - [x] Vim/NeoVim
+  - [x] jGRASP
 
 **5. Tools**
-  - [ ] Docker
+  - [x] Docker
   - [X] Git/Github
-  
+  - [x] Hadoop/Yarn ecosys
 **6. Projects**
   - [X] Simple ATM
   - [X] Simple ATM Rewrite
@@ -51,10 +52,11 @@
 - ~~Python Basic~~
 - ~~Simple ATM~~
 - ~~Console 2048~~
-- Simple ATM Rewrite `ongoing`
-- Data Structures `ongoing`
-- Algorithms `ongoing`
-- Adv Statistics `ongoing`
-- Adv Linear Algebra `ongoing`
-- C# Advanced `ongoing`
-
+- ～Data Structures 
+- ～Algorithms 
+- ～Adv Statistics 
+- ～Adv Linear Algebra 
+- ～C# Advanced 
+- ~CUDA Intro with Projs
+- ~Build Hadoop Cluster on Azure (emo analysis proj)
+- ~SQL
