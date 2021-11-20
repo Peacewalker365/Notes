@@ -52,11 +52,11 @@
 - ~~Python Basic~~
 - ~~Simple ATM~~
 - ~~Console 2048~~
-- ～Data Structures 
-- ～Algorithms 
-- ～Adv Statistics 
-- ～Adv Linear Algebra 
-- ～C# Advanced 
-- ~CUDA Intro with Projs
-- ~Build Hadoop Cluster on Azure (emo analysis proj)
-- ~SQL
+- ~~Data Structures 
+- ~~Algorithms 
+- ~~Adv Statistics 
+- ~~Adv Linear Algebra 
+- ~~C# Advanced 
+- ~~CUDA Intro with Projs
+- ~~Build Hadoop Cluster on Azure (emo analysis proj)
+- ~~SQL
