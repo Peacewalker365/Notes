@@ -58,3 +58,5 @@
 - ~~CUDA Intro with Projs
 - ~~Build Hadoop Cluster on Azure (emo analysis proj)
 - ~~SQL
+
+
