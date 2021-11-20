@@ -1,5 +1,3 @@
-##**CS Study Plan 2020**
-
 **1. Fundamentals**
   - [X] Computer Architecture and Organization
   - [X] Data Structures
