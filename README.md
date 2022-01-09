@@ -11,42 +11,44 @@
   - [X] C/C++
   - [X] C#/Java
   - [X] Python
-  - [ ] JavaScript
-  - [ ] Go
-  - [ ] Rust
+  - [x] JavaScript
+  - [x] Go
+  - [x] Rust
+  - [x] Swift
 
 **3. Shells**
-  - [X] Zsh
+  - [x] Zsh
   - [x] Bash
   - [x] SSH (SFP SCP...)
   
 **4. IDEs/Text Editors**
   - [X] IntelliJ IDEA
-  - [X] VSCode
+  - [x] VSCode
   - [x] Vim/NeoVim
   - [x] jGRASP
 
 **5. Tools**
   - [x] Docker
-  - [X] Git/Github
+  - [x] Git/Github
   - [x] Hadoop/Yarn ecosys
+  - [x] Maven
+  - [x] Tomcat
+  - [x] Sevlet
 **6. Projects**
-  - [X] Simple ATM
-  - [X] Simple ATM Rewrite
-  - [X] Console 2048 mini-Game
-  - [X] Mainstream Algo Realization
+  - [ ] Full stack proj --> ongoing
   
   
   
-###**Progresses**
-- [X] Adv Statistics 
-- [X] Adv Linear Algebra 
-- [X] C# Advanced 
-- [X] CUDA Intro with Projs
-- [X] Build Hadoop Cluster on Azure (emo analysis proj)
-- [X] SQL
-- [ ] Go
-- [ ] More Design Patterns
-- [ ] Spring5/Spring Boot2
+###**Recent Progresses**
+- [x] Adv Statistics 
+- [x] Adv Linear Algebra 
+- [x] C# Advanced 
+- [x] CUDA Intro with Projs
+- [x] Build Hadoop Cluster on Azure (emo analysis proj)
+- [x] SQL
+- [ ] Go --> ongoing
+- [x] More Design Patterns
+- [ ] Spring5/Spring Boot2 --> ongoing
+- [ ] React.js --> ongoing
 
 
